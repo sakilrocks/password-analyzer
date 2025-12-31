@@ -96,3 +96,53 @@ fn strength_label(score: u8) -> &'static str {
 }
 
 
+
+
+
+fn main() {
+
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 2 {
+        println!("usage: password-check \"your password here\"");
+        return;
+    }
+
+    let password = &args[1];
+    let analysis = analyze_password(password);
+
+    let mut score = 0;
+    if analysis.length >= 12 {
+        score += 2;
+    }
+    if analysis.has_lower {
+        score += 1;
+    }
+    if analysis.has_upper {
+        score += 1;
+    }
+    if analysis.has_digit {
+        score += 1;
+    }
+    if analysis.has_symbol {
+        score += 1;
+    }
+
+    let charset = charset_size(&analysis);
+    let seconds = estimate_crack_time(analysis.length, charset);
+
+
+
+    println!("Strength: {}", strength_label(score));
+    println!("Length: {}", analysis.length);
+    println!("Character set size: {}", charset);
+    println!("Estimated crack time: ~{}", format_time(seconds));
+
+    println!("\nDetails:");
+    println!("Lowercase letters: {}", analysis.has_lower);
+    println!("Uppercase letters: {}", analysis.has_upper);
+    println!("Digits: {}", analysis.has_digit);
+    println!("Symbols: {}", analysis.has_symbol);
+
+    
+}
