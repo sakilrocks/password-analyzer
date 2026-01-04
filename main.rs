@@ -15,7 +15,7 @@ struct PasswordAnalysis {
 
 fn analyze_password(password: &str) -> PasswordAnalysis {
     let mut analysis = PasswordAnalysis {
-        length: password.len(),
+        length: password.chars().count(),
         has_lower: false,
         has_upper: false,
         has_digit: false,
